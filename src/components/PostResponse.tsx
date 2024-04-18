@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import ProfileWithStatus from './ProfileWithStatus';
 import NameRoleComponent from './NameRoleComponent';
 
-const postResponse = () => {
+const PostResponse = () => {
     const [question, setQuestion] = useState('');
     const [response, setResponse] = useState('');
     const [previousQuestions, setPreviousQuestions] = useState<string[]>(["What is Vue", "Is js single-threaded or multi-threaded", "Event Loop?"]);
@@ -124,4 +124,4 @@ const postResponse = () => {
     )
 }
 
-export default postResponse
+export default PostResponse
