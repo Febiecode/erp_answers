@@ -4,35 +4,6 @@ import Link from 'next/link';
 import { Button } from "@/components/ui/button"
 const LandingPage: React.FC = () => {
     const [question, setQuestion] = useState('');
-    const [response, setResponse] = useState('');
-    const [previousQuestions, setPreviousQuestions] = useState<string[]>(["What is Vue", "Is js single-threaded or multi-threaded", "Event Loop?"]);
-
-    const handleSubmit = async () => {
-        if (question.trim() === '') {
-            // If empty, return without submitting
-            return;
-        }
-        try {
-            const response = await fetch('https://jsonplaceholder.typicode.com/posts/1');
-
-            if (!response.ok) {
-                throw new Error('Failed to fetch response');
-            }
-
-            const responseData = await response.json();
-            // Simulate a response based on the user's question
-            setResponse(responseData.title);
-
-            // setPreviousQuestions(prevQuestions => [...prevQuestions, question]);
-
-            setQuestion('');
-        } catch (error) {
-            console.error('Error:', error);
-            setResponse('Sorry, something went wrong. Please try again later.');
-        }
-    };
-
-    const profileImg = require('../../public/next.svg');
 
     return (
         <div className='min-h-screen flex flex-col'>
@@ -53,47 +24,26 @@ const LandingPage: React.FC = () => {
                     </div>
                 </div>
                 <hr className='my-4 border-gray-300' />
-                <div className="flex justify-center">
+                <div className="flex justify-center items-center my-20">
                     <div className='w-[80%] bg-grayBackground rounded-lg p-4'>
                         <div className='text-left'>
                             <h2 className='text-lg font-semibold'>Post Your Question</h2>
                             <textarea
+                            style={{resize: "vertical", minHeight: "100px" }}
                                 value={question}
                                 onChange={(e) => setQuestion(e.target.value)}
                                 className='w-full border border-gray-300 rounded-md px-3 py-2 mt-2'
                                 placeholder='Type your question here...'></textarea>
                             <div className='flex justify-end mt-2'>
                                 <Link href="/register">
-                                    <Button className='text-bluePrimary bg-white hover:bg-bluePrimary hover:text-white border-2 border-bluePrimary font-semibold py-2 px-4 rounded-md mx-2'>Sign Up/ Sign In</Button>
-                                </Link>
-                                <Link href="#joinForum">
-                                    <Button
-                                        onClick={handleSubmit}
-                                        className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'
-                                    >
-                                        Submit
-                                    </Button>
+                                    <Button className='text-bluePrimary bg-white hover:bg-bluePrimary hover:text-white border-2 border-bluePrimary font-semibold py-2 px-4 rounded-md mx-2'>Sign up to post your questions</Button>
                                 </Link>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div className="min-h-screen bg-blueSecondary mt-5 flex flex-col justify-center items-center">
-                    <div className='xl:w-[30%] lg:w-[30%] sm:w-[95%] xxsm:w-[95%] flex flex-col justify-center items-center'>
-                        <h1 className=' text-[35px] font-semibold'>Join the forum</h1>
-                        <p className='text-center my-5'>Post your question after login and get your answer from our experts. Its totally free.</p>
-                        <Link href="/login">
-                            <Button id='joinForum'
-                                onClick={handleSubmit}
-                                className='bg-bluePrimary hover:bg-bluePrimary text-white  font-semibold py-2 px-4 rounded-md'
-                            >
-                                Sign Up Now
-                            </Button>
-                        </Link>
-                    </div>
-
-                </div>
+                
 
 
             </div>

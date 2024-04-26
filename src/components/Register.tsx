@@ -1,12 +1,13 @@
 "use client"
 
-import React from 'react'
+import React, {useState} from 'react'
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
+import Spinner from '../components/Spinner';
 
 import {
     Form,
@@ -20,7 +21,7 @@ import {
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import Image from 'next/image';
+import api from '../services/api'
 
 const formSchema = z.object({
     email: z.string().email({
@@ -38,7 +39,8 @@ const formSchema = z.object({
 });
 
 const Register = () => {
-    const profileImg = require('../../public/next.svg');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -49,11 +51,30 @@ const Register = () => {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        setIsSubmitting(true);
+        try {
+
+            const formData = {email: values.email, password: values.password, confirmPassword: values.confirmPassword, isAdmin: false, userName: values.email.slice(0, values.email.indexOf("@")), isActive: true}
+            
+            const response = await api.post('api/Register/register', formData);
+            // Assuming the response contains session information like a token
+            const { token} = response.data;
+            // Store the token in local storage
+            localStorage.setItem('token', token);
+
+            if(!token){
+                router.push('/login');
+            }else{
+                router.push('/register');
+            }
+            
+        } catch (error) {
+            console.error('Login failed:', error);
+            // Handle login failure, maybe display an error message to the user
+        }
     }
+
     return (
         <div className='min-h-screen flex flex-col'>
             <div className='container-fluid  mt-5'>
@@ -80,7 +101,7 @@ const Register = () => {
 
                             <h1 className='text-[30px] font-semibold my-2'>Product Logo</h1>
 
-                            <h1 className='font-semibold text-xl my-2 text-center'>Get Starter with Naiduhall</h1>
+                            <h1 className='font-semibold text-xl my-2 text-center'>Get Starter with ERP Answers</h1>
                             <h1 className='text-gray-400 mb-5 text-sm text-center'>Enter your personal infomation</h1>
                         </div>
                         <Form {...form}>
@@ -131,10 +152,13 @@ const Register = () => {
                                     )}
                                 />
                                 <div className="flex justify-center">
-                                    <Button className='w-full bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md mb-3' type="submit">Register</Button>
+                                    <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md w-full' type="submit">{isSubmitting ? <Spinner /> : "Register"}</Button>
                                 </div>
                             </form>
                         </Form>
+                        <div className='pt-5 flex w-full justify-center'>
+                            <a href="/login">Aleardy a User? <span className='text-bluePrimary '>Sign In</span></a>
+                        </div>
                     </div>
                 </div>
 

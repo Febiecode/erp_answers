@@ -1,14 +1,14 @@
 "use client"
 
-import React from 'react'
+import React, {useState} from 'react'
 import Link from 'next/link';
-
+import { useRouter } from 'next/navigation';
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-
+import Spinner from '../components/Spinner';
 import {
     Form,
     FormControl,
@@ -19,13 +19,15 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
+import api from '../services/api'
+
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import Image from 'next/image';
 
 const formSchema = z.object({
-    email: z.string().email({
-        message: "Invalid email format.",
+    email: z.string().min(6,{
+        message: "Invalid userName format.",
     }),
     password: z.string().min(6, {
         message: "Password must be at least 6 characters.",
@@ -33,7 +35,8 @@ const formSchema = z.object({
 })
 
 const Login = () => {
-    const profileImg = require('../../public/next.svg');
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const router = useRouter();
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -43,10 +46,30 @@ const Login = () => {
         },
     })
 
-    function onSubmit(values: z.infer<typeof formSchema>) {
-        // Do something with the form values.
-        // ✅ This will be type-safe and validated.
-        console.log(values)
+    async function onSubmit(values: z.infer<typeof formSchema>) {
+        setIsSubmitting(true);
+        try {
+            
+            const response = await api.post('api/Login/Login', values);
+            // Assuming the response contains session information like a token
+            const { userName, email, userId, token, isAdmin } = response.data;
+            // Store the token in local storage
+            localStorage.setItem('token', token);
+            localStorage.setItem('userName', userName);
+            localStorage.setItem('email', email);
+            localStorage.setItem('userId', userId);
+            localStorage.setItem('isAdmin', isAdmin);
+
+            if(isAdmin === false){
+                router.push('userPost');
+            }else{
+                router.push('admin');
+            }
+            
+        } catch (error) {
+            console.error('Login failed:', error);
+            // Handle login failure, maybe display an error message to the user
+        }
     }
     return (
         <div className='min-h-screen flex flex-col'>
@@ -58,7 +81,7 @@ const Login = () => {
                         </Link>
                         <div className='flex items-center mx-5'>
                             <Link href="/login">
-                                <Button className='text-black bg-white hover:bg-bluePrimary hover:text-white border-none font-semibold py-2 px-4 rounded-md mx-2'>Login</Button>
+                                <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'>Login</Button>
                             </Link>
                             <Link href="/register">
                                 <Button className='text-bluePrimary bg-white hover:bg-bluePrimary hover:text-white border-2 border-bluePrimary font-semibold py-2 px-4 rounded-md mx-2'>Register</Button>
@@ -71,11 +94,8 @@ const Login = () => {
                 <div className="w-full flex flex-col items-center mt-20 mb-10">
                     <div className=' xl:w-[30%] lg:w-[40%] sm:w-[95%] xxsm:w-[95%] flex flex-col justify-center bg-blueSecondary p-5 rounded-lg'>
                         <div className='flex flex-col items-center'>
-                            {/* <Image src={require('../../../public/vercel.svg')} alt='naiduhall logo' width={100} height={100} className='my-5'/> */}
-
                             <h1 className='text-[30px] font-semibold my-2'>Product Logo</h1>
-
-                            <h1 className='font-semibold text-xl my-2 text-center'>Get Starter with Naiduhall</h1>
+                            <h1 className='font-semibold text-xl my-2 text-center'>Get Starter with ERP Answers</h1>
                             <h1 className='text-gray-400 mb-5 text-sm text-center'>Welcome<span>&#33;</span> Let&apos;s get started<span>&#33;</span></h1>
                         </div>
                         <Form {...form}>
@@ -111,10 +131,13 @@ const Login = () => {
                                     )}
                                 />
                                 <div className="flex justify-center">
-                                    <Button className='w-full bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md mb-3' type="submit">Login</Button>
+                                    <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md w-full' type="submit">{isSubmitting ? <Spinner /> : "Login"}</Button>
                                 </div>
                             </form>
                         </Form>
+                        <div className='pt-5 flex w-full justify-center'>
+                            <a href="/register">Not a User? <span className='text-bluePrimary '>Sign Up</span></a>
+                        </div>
                     </div>
                 </div>
 

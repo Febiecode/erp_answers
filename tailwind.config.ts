@@ -18,16 +18,12 @@ const config = {
       },
     },
     extend: {
-      screens: {
-        'xxsm': '320px',
-        'xsm': '375px',
-        // => @media (min-width: 992px) { ... }
-      },
       colors: {
         redCustom: '#CB0019',
         bluePrimary: '#065DE6',
         blueSecondary: '#CCDEFA',
         grayBackground: '#F1F5F9',
+        success:'#28a745',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
