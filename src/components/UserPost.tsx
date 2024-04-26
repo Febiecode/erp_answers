@@ -44,6 +44,8 @@ const UserPost = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
 
+    localStorage.setItem("email", '')
+    localStorage.setItem("userId", '')
     const email = localStorage.getItem('email')
     const userId = localStorage.getItem('userId')
 
