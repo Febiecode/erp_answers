@@ -39,15 +39,12 @@ const formSchema = z.object({
 
 const UserPost = () => {
     const [responses, setResponses] = useState<Response[]>([]);
-    const [question, setQuestion] = useState('');
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
 
-    localStorage.setItem("email", '')
-    localStorage.setItem("userId", '')
-    const email = localStorage.getItem('email')
-    const userId = localStorage.getItem('userId')
+    const email = typeof window !== 'undefined' ? localStorage.getItem('email') : null
+    const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
 
     useEffect(() => {
         // Set timeout to hide success alert after 3 seconds
