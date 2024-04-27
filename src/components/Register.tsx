@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -18,6 +18,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { useFormStatus } from 'react-dom';
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
 
 import { Input } from "@/components/ui/input"
@@ -42,6 +43,7 @@ const formSchema = z.object({
 const Register = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [err, setErr] = useState('')
+    const {pending} = useFormStatus();
 
     const router = useRouter();
     // 1. Define your form.
@@ -53,6 +55,18 @@ const Register = () => {
             confirmPassword: ""
         },
     })
+
+    useEffect(() => {
+        // Set timeout to hide success alert after 3 seconds
+        if (err) {
+            const successTimer = setTimeout(() => {
+                setErr('');
+                window.location.reload();
+            }, 3000);
+            return () => clearTimeout(successTimer);
+        }
+
+    }, [err]);
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         
@@ -159,7 +173,7 @@ const Register = () => {
                                     )}
                                 />
                                 <div className="flex justify-center">
-                                    <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md w-full' type="submit">{isSubmitting ? <Spinner /> : "Register"}</Button>
+                                    <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md w-full' type="submit" disabled={pending}>{isSubmitting ? <Spinner /> : "Register"}</Button>
                                 </div>
                             </form>
                             <div className='mt-5'>

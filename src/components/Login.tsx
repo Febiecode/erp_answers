@@ -18,6 +18,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { useFormStatus } from 'react-dom';
 
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
 
@@ -40,6 +41,7 @@ const Login = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [err, setErr] = useState('')
     const router = useRouter();
+    const {pending} = useFormStatus();
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
     const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
@@ -63,6 +65,7 @@ const Login = () => {
         if (err) {
             const successTimer = setTimeout(() => {
                 setErr('');
+                window.location.reload();
             }, 3000);
             return () => clearTimeout(successTimer);
         }
@@ -80,6 +83,7 @@ const Login = () => {
             console.log(userExist.status)
            
             if (userExist.status === 204 || userExist.status === 203) {
+                
                 setErr('Non-Authoritative Information. Please give a valid user credentials.');
                 setIsSubmitting(false);
             } else if (isAdmin === false && userExist.status === 200) {
@@ -164,7 +168,7 @@ const Login = () => {
                                     )}
                                 />
                                 <div className="flex justify-center">
-                                    <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md w-full' type="submit">{isSubmitting ? <Spinner /> : "Login"}</Button>
+                                    <Button  className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md w-full' type="submit" disabled={pending}>{isSubmitting ? <Spinner /> : "Login"}</Button>
                                 </div>
                             </form>
                             <div className='mt-5'>
