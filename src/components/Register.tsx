@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -18,6 +18,7 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form"
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
 
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -40,6 +41,8 @@ const formSchema = z.object({
 
 const Register = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [err, setErr] = useState('')
+
     const router = useRouter();
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
@@ -52,27 +55,31 @@ const Register = () => {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
+        
+
         setIsSubmitting(true);
         try {
 
-            const formData = {email: values.email, password: values.password, confirmPassword: values.confirmPassword, isAdmin: false, userName: values.email.slice(0, values.email.indexOf("@")), isActive: true}
-            
-            const response = await api.post('api/Register/register', formData);
-            // Assuming the response contains session information like a token
-            const { token} = response.data;
-            // Store the token in local storage
-            localStorage.setItem('token', token);
-
-            if(!token){
+            const formData = { email: values.email, password: values.password, confirmPassword: values.confirmPassword, isAdmin: false, userName: values.email.slice(0, values.email.indexOf("@")), isActive: true }         
+            const userExist = await api.get('api/Register/Email?Email=' + values.email);
+            if (userExist.status === 203 || userExist.status === 204) {
+                const response = await api.post('api/Register/register', formData);
+                const { token } = response.data;
+                // Store the token in local storage
+                localStorage.setItem('token', token);
                 router.push('/login');
-            }else{
+            } else if (userExist.status === 200) {
                 router.push('/register');
+                setIsSubmitting(false);
+                setErr('User is already exist.')
             }
-            
         } catch (error) {
-            console.error('Login failed:', error);
-            // Handle login failure, maybe display an error message to the user
+            console.error('Registration failed', error);
+            setErr('Registration failed')
+            setIsSubmitting(false);
         }
+
+        
     }
 
     return (
@@ -105,7 +112,7 @@ const Register = () => {
                             <h1 className='text-gray-400 mb-5 text-sm text-center'>Enter your personal infomation</h1>
                         </div>
                         <Form {...form}>
-                            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                            <form id='myForm' onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                                 <FormField
                                     control={form.control}
                                     name="email"
@@ -155,6 +162,14 @@ const Register = () => {
                                     <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md w-full' type="submit">{isSubmitting ? <Spinner /> : "Register"}</Button>
                                 </div>
                             </form>
+                            <div className='mt-5'>
+                                {err && (
+                                    <Alert variant="destructive">
+                                        <AlertTitle>Error</AlertTitle>
+                                        <AlertDescription>{err}</AlertDescription>
+                                    </Alert>
+                                )}
+                            </div>
                         </Form>
                         <div className='pt-5 flex w-full justify-center'>
                             <a href="/login">Aleardy a User? <span className='text-bluePrimary '>Sign In</span></a>

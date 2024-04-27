@@ -15,7 +15,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
-
+import { useRouter } from 'next/navigation';
 
 
 import { Textarea } from "@/components/ui/textarea"
@@ -38,13 +38,22 @@ const formSchema = z.object({
 })
 
 const UserPost = () => {
+    const [isClient, setIsClient] = useState(false)
     const [responses, setResponses] = useState<Response[]>([]);
     const [openIndex, setOpenIndex] = useState<number | null>(null);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
+    const router = useRouter();
 
     const email = typeof window !== 'undefined' ? localStorage.getItem('email') : null
     const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
+    
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
+
+    if(token && isAdmin === 'false'){
+        router.push('/userPost');
+    }
 
     useEffect(() => {
         // Set timeout to hide success alert after 3 seconds
@@ -69,6 +78,7 @@ const UserPost = () => {
             try {
                 const response = await api.get('api/ERP/QuestionAnswerByUserID?userId=' + userId);
                 setResponses(response.data);
+                setIsClient(true)
             } catch (error) {
                 console.error('Error fetching data:', error);
             }
@@ -91,9 +101,9 @@ const UserPost = () => {
                 const formData = { "userID": userId, "email": email, question: values.ques }
                 // Make a POST request to the API endpoint with the form values
                 const response = await api.post("api/ERP/Question", formData);
-
                 // Handle success response
                 console.log("Form submitted successfully:", response.data);
+                
                 setIsSuccess(true);
             } else {
                 console.log("Error submitting form");
@@ -142,7 +152,7 @@ const UserPost = () => {
                         <div className='w-[90%] bg-grayBackground rounded-lg p-4'>
                             <div className='text-left'>
                                 <div className='flex'>
-                                    <CircleUserRound /><h1 className='text-lg font-semibold mb-10'>{email}</h1>
+                                    <CircleUserRound /><h1 className='text-lg font-semibold mb-10'>{isClient ? email : 'Please Login'}</h1>
                                 </div>
                                 <Form {...form}>
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -172,7 +182,7 @@ const UserPost = () => {
                                             {isError && (
                                                 <Alert variant="destructive">
                                                     <AlertTitle>Error</AlertTitle>
-                                                    <AlertDescription>Failed to submit form. Please try again later.</AlertDescription>
+                                                    <AlertDescription>Failed to Login. Please try again later.</AlertDescription>
                                                 </Alert>
                                             )}
                                         </div>

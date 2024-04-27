@@ -1,6 +1,6 @@
 "use client"
 
-import React, {useState} from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -19,6 +19,8 @@ import {
     FormMessage,
 } from "@/components/ui/form"
 
+import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
+
 import api from '../services/api'
 
 import { Input } from "@/components/ui/input"
@@ -26,7 +28,7 @@ import { Button } from "@/components/ui/button"
 import Image from 'next/image';
 
 const formSchema = z.object({
-    email: z.string().min(6,{
+    email: z.string().min(6, {
         message: "Invalid userName format.",
     }),
     password: z.string().min(6, {
@@ -36,7 +38,17 @@ const formSchema = z.object({
 
 const Login = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [err, setErr] = useState('')
     const router = useRouter();
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
+
+    if(token && isAdmin === 'false'){
+        router.push('/userPost');
+    }else if(token && isAdmin === 'true'){
+        router.push('/admin');
+    }
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -46,26 +58,47 @@ const Login = () => {
         },
     })
 
+    useEffect(() => {
+        // Set timeout to hide success alert after 3 seconds
+        if (err) {
+            const successTimer = setTimeout(() => {
+                setErr('');
+            }, 3000);
+            return () => clearTimeout(successTimer);
+        }
+
+    }, [err]);
+
     async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsSubmitting(true);
         try {
-            
+
             const response = await api.post('api/Login/Login', values);
             // Assuming the response contains session information like a token
             const { userName, email, userId, token, isAdmin } = response.data;
-            // Store the token in local storage
-            localStorage.setItem('token', token);
-            localStorage.setItem('userName', userName);
-            localStorage.setItem('email', email);
-            localStorage.setItem('userId', userId);
-            localStorage.setItem('isAdmin', isAdmin);
-
-            if(isAdmin === false){
+            const userExist = await api.get('api/Register/Email?Email=' + email);
+            console.log(userExist.status)
+           
+            if (userExist.status === 204 || userExist.status === 203) {
+                setErr('Non-Authoritative Information. Please give a valid user credentials.');
+                setIsSubmitting(false);
+            } else if (isAdmin === false && userExist.status === 200) {
+                 // Store the token in local storage
+                localStorage.setItem('token', token);
+                localStorage.setItem('userName', userName);
+                localStorage.setItem('email', email);
+                localStorage.setItem('userId', userId);
+                localStorage.setItem('isAdmin', isAdmin);
                 router.push('userPost');
-            }else{
+            } else if (isAdmin === true && userExist.status === 200) {
+                localStorage.setItem('token', token);
+                localStorage.setItem('userName', userName);
+                localStorage.setItem('email', email);
+                localStorage.setItem('userId', userId);
+                localStorage.setItem('isAdmin', isAdmin);
                 router.push('admin');
             }
-            
+
         } catch (error) {
             console.error('Login failed:', error);
             // Handle login failure, maybe display an error message to the user
@@ -134,6 +167,14 @@ const Login = () => {
                                     <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md w-full' type="submit">{isSubmitting ? <Spinner /> : "Login"}</Button>
                                 </div>
                             </form>
+                            <div className='mt-5'>
+                                {err && (
+                                    <Alert variant="destructive">
+                                        <AlertTitle>Error</AlertTitle>
+                                        <AlertDescription>{err}</AlertDescription>
+                                    </Alert>
+                                )}
+                            </div>
                         </Form>
                         <div className='pt-5 flex w-full justify-center'>
                             <a href="/register">Not a User? <span className='text-bluePrimary '>Sign Up</span></a>

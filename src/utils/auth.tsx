@@ -8,9 +8,12 @@ export const withAuth = <P extends object>(WrappedComponent: React.ComponentType
 
     useEffect(() => {
       const token = localStorage.getItem('token');
+      const isAdmin = localStorage.getItem('isAdmin');
       if (!token) {
         router.push('/login');
-      }
+      }else if(isAdmin === 'true'){
+        router.push('/admin')
+    }
     }, []);
 
     return <WrappedComponent {...props} />;

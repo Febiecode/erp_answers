@@ -16,6 +16,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
+import { useRouter } from 'next/navigation';
 
 import { Textarea } from "@/components/ui/textarea"
 
@@ -50,6 +51,14 @@ const AdminPost = () => {
     const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestions[]>([]);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
+    const router = useRouter();
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
+
+    if(token && isAdmin === 'true'){
+        router.push('/admin');
+    }
 
     useEffect(() => {
         // Set timeout to hide success alert after 3 seconds
