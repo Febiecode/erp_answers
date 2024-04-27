@@ -200,11 +200,11 @@ const AdminPost = () => {
                                                             name="answer"
                                                             render={({ field }) => (
                                                                 <FormItem>
-                                                                    <FormLabel>Post Your Question</FormLabel>
+                                                                    <FormLabel>Post Answer</FormLabel>
                                                                     <FormControl>
 
                                                                         <Textarea {...field}
-                                                                            placeholder='Type your question here...' />
+                                                                            placeholder='Type your answer here...' />
 
                                                                     </FormControl>
                                                                     <FormMessage />
