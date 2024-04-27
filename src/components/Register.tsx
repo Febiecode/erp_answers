@@ -29,6 +29,9 @@ const formSchema = z.object({
     email: z.string().email({
         message: "Invalid email format.",
     }),
+    username: z.string().min(4,{
+        message: "Invalid username",
+    }),
     password: z.string().min(6, {
         message: "Password must be at least 6 characters.",
     }),
@@ -51,6 +54,7 @@ const Register = () => {
         resolver: zodResolver(formSchema),
         defaultValues: {
             email: "",
+            username: "",
             password: "",
             confirmPassword: ""
         },
@@ -74,7 +78,8 @@ const Register = () => {
         setIsSubmitting(true);
         try {
 
-            const formData = { email: values.email, password: values.password, confirmPassword: values.confirmPassword, isAdmin: false, userName: values.email.slice(0, values.email.indexOf("@")), isActive: true }         
+            const formData = { email: values.email, password: values.password, confirmPassword: values.confirmPassword, isAdmin: false, userName: values.username, isActive: true }  
+            console.log(formData)       
             const userExist = await api.get('api/Register/Email?Email=' + values.email);
             if (userExist.status === 203 || userExist.status === 204) {
                 const response = await api.post('api/Register/register', formData);
@@ -134,6 +139,21 @@ const Register = () => {
                                         <FormItem>
                                             <FormControl>
                                                 <Input className='bg-white p-5' placeholder="Enter Email" {...field} />
+                                            </FormControl>
+                                            {/* <FormDescription>
+                                This is your public display name.
+                            </FormDescription> */}
+                                            <FormMessage />
+                                        </FormItem>
+                                    )}
+                                />
+                                <FormField
+                                    control={form.control}
+                                    name="username"
+                                    render={({ field }) => (
+                                        <FormItem>
+                                            <FormControl>
+                                                <Input className='bg-white p-5' placeholder="Username" {...field} />
                                             </FormControl>
                                             {/* <FormDescription>
                                 This is your public display name.
