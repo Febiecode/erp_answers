@@ -2,8 +2,18 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { Button } from "@/components/ui/button"
+import { useRouter } from 'next/navigation';
 const LandingPage: React.FC = () => {
     const [question, setQuestion] = useState('');
+    const router = useRouter();
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
+
+    if(token && isAdmin === 'false'){
+        router.push('/userPost');
+    }else if(token && isAdmin === 'true'){
+        router.push('/admin');
+    }
 
     return (
         <div className='min-h-screen flex flex-col'>

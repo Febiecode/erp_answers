@@ -49,6 +49,17 @@ const Register = () => {
     const { pending } = useFormStatus();
 
     const router = useRouter();
+
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
+
+    if(token && isAdmin === 'false'){
+        router.push('/userPost');
+    }else if(token && isAdmin === 'true'){
+        router.push('/admin');
+    }
+
+    
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
