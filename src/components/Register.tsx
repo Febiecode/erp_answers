@@ -27,10 +27,10 @@ import api from '../services/api'
 
 const formSchema = z.object({
     email: z.string().email({
-        message: "Invalid email format.",
+        message: "Please enter the Email ",
     }),
-    username: z.string().min(4,{
-        message: "Invalid username",
+    username: z.string().min(4, {
+        message: "Please enter the Username",
     }),
     password: z.string().min(6, {
         message: "Password must be at least 6 characters.",
@@ -39,14 +39,14 @@ const formSchema = z.object({
         message: "Password must be at least 6 characters.",
     }),
 }).refine(data => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
+    message: "Those passwords didn't match",
     path: ["confirmPassword"],
 });
 
 const Register = () => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [err, setErr] = useState('')
-    const {pending} = useFormStatus();
+    const { pending } = useFormStatus();
 
     const router = useRouter();
     // 1. Define your form.
@@ -59,27 +59,23 @@ const Register = () => {
             confirmPassword: ""
         },
     })
-
     useEffect(() => {
-        // Set timeout to hide success alert after 3 seconds
+        form.reset()
         if (err) {
             const successTimer = setTimeout(() => {
-                setErr('');
-                window.location.reload();
             }, 3000);
             return () => clearTimeout(successTimer);
         }
 
     }, [err]);
 
-    async function onSubmit(values: z.infer<typeof formSchema>) {
-        
 
+    async function onSubmit(values: z.infer<typeof formSchema>) {
         setIsSubmitting(true);
         try {
 
-            const formData = { email: values.email, password: values.password, confirmPassword: values.confirmPassword, isAdmin: false, userName: values.username, isActive: true }  
-            console.log(formData)       
+            const formData = { email: values.email, password: values.password, confirmPassword: values.confirmPassword, isAdmin: false, userName: values.username, isActive: true }
+            console.log(formData)
             const userExist = await api.get('api/Register/Email?Email=' + values.email);
             if (userExist.status === 203 || userExist.status === 204) {
                 const response = await api.post('api/Register/register', formData);
@@ -98,7 +94,7 @@ const Register = () => {
             setIsSubmitting(false);
         }
 
-        
+
     }
 
     return (
@@ -109,12 +105,12 @@ const Register = () => {
                         <Link href="/">
                             <h1 className='text-xl font-bold items-center mx-5'><span className='text-redCustom'>ERP</span><span className='text-bluePrimary'>Answers</span></h1>
                         </Link>
-                        <div className='flex items-center mx-5'>
+                        <div className='flex items-center mx-5  gap-3'>
                             <Link href="/login">
-                                <Button className='text-black bg-white hover:bg-bluePrimary hover:text-white border-none font-semibold py-2 px-4 rounded-md mx-2'>Login</Button>
+                                <Button className='border border-bluePrimary bg-white text-bluePrimary hover:bg-bluePrimary rounded-lg hover:text-white px-4 py-2 '>Login</Button>
                             </Link>
                             <Link href="/register">
-                                <Button className='text-bluePrimary bg-white hover:bg-bluePrimary hover:text-white border-2 border-bluePrimary font-semibold py-2 px-4 rounded-md mx-2'>Register</Button>
+                                <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold border-1 py-2 px-4 rounded-md'>Register</Button>
                             </Link>
                         </div>
                     </div>
@@ -122,13 +118,11 @@ const Register = () => {
                 <hr className='my-4 border-gray-300' />
                 <div className="w-full flex flex-col items-center mt-20 mb-10">
                     <div className=' xl:w-[30%] lg:w-[40%] sm:w-[95%] xxsm:w-[95%] flex flex-col justify-center bg-blueSecondary p-5 rounded-lg'>
-                        <div className='flex flex-col items-center'>
-                            {/* <Image src={require('../../../public/vercel.svg')} alt='naiduhall logo' width={100} height={100} className='my-5'/> */}
-
-                            <h1 className='text-[30px] font-semibold my-2'>Product Logo</h1>
-
-                            <h1 className='font-semibold text-xl my-2 text-center'>Get Starter with ERP Answers</h1>
-                            <h1 className='text-gray-400 mb-5 text-sm text-center'>Enter your personal infomation</h1>
+                        <div className='flex flex-col items-center mb-5'>
+                            <Link href="/">
+                                <h1 className='text-xl font-bold items-center mx-5 my-2'><span className='text-redCustom'>ERP</span><span className='text-bluePrimary'>Answers</span></h1>
+                            </Link>
+                            <h1 className='font-semibold text-xl my-2 text-center'>Get Started With ERPAnswers</h1>
                         </div>
                         <Form {...form}>
                             <form id='myForm' onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -138,7 +132,7 @@ const Register = () => {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input className='bg-white p-5' placeholder="Enter Email" {...field} />
+                                                <Input className='bg-white p-5' placeholder="Email Format" {...field} />
                                             </FormControl>
                                             {/* <FormDescription>
                                 This is your public display name.
@@ -168,8 +162,11 @@ const Register = () => {
                                     render={({ field }) => (
                                         <FormItem >
                                             <FormControl>
-                                                <Input className='bg-white p-5' placeholder="Password" type='password' {...field} />
+                                                <Input className='bg-white p-5' placeholder="Password" {...field} type='password' showPasswordToggle />
+                                                {/* Icon to toggle password visibility */}
+
                                             </FormControl>
+
                                             {/* <FormDescription>
                                 This is your public display name.
                             </FormDescription> */}
@@ -183,7 +180,7 @@ const Register = () => {
                                     render={({ field }) => (
                                         <FormItem >
                                             <FormControl>
-                                                <Input className='bg-white p-5' placeholder="Confirm Password" type='password' {...field} />
+                                                <Input className='bg-white p-5' placeholder="Confirm Password" type='password' {...field} showPasswordToggle />
                                             </FormControl>
                                             {/* <FormDescription>
                                 This is your public display name.

@@ -29,11 +29,13 @@ import { Button } from "@/components/ui/button"
 import Image from 'next/image';
 
 const formSchema = z.object({
-    email: z.string().min(6, {
-        message: "Invalid userName format.",
-    }),
-    password: z.string().min(6, {
-        message: "Password must be at least 6 characters.",
+    email: z
+    .string()
+    .min(1, { message: "Please Enter The Email" })
+    .email({message: "Invalid Email Format"}),
+    password: z.string().min(1,{
+        message: "Please Enter The Password",
+    }).min(5, {message: "Password must be at least 6 characters."
     }),
 })
 
@@ -60,13 +62,16 @@ const Login = () => {
         },
     })
 
+    
+
     useEffect(() => {
         // Set timeout to hide success alert after 3 seconds
         if (err) {
+            form.reset()
             const successTimer = setTimeout(() => {
                 setErr('');
-                window.location.reload();
             }, 3000);
+            
             return () => clearTimeout(successTimer);
         }
 
@@ -84,7 +89,7 @@ const Login = () => {
            
             if (userExist.status === 204 || userExist.status === 203) {
                 
-                setErr('Non-Authoritative Information. Please give a valid user credentials.');
+                setErr('Please give a valid user credentials.');
                 setIsSubmitting(false);
             } else if (isAdmin === false && userExist.status === 200) {
                  // Store the token in local storage
@@ -116,12 +121,12 @@ const Login = () => {
                         <Link href="/">
                             <h1 className='text-xl font-bold items-center mx-5'><span className='text-redCustom'>ERP</span><span className='text-bluePrimary'>Answers</span></h1>
                         </Link>
-                        <div className='flex items-center mx-5'>
+                        <div className='flex items-center mx-5 gap-3'>
                             <Link href="/login">
-                                <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'>Login</Button>
+                                <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold border-1 py-2 px-4 rounded-md'>Login</Button>
                             </Link>
                             <Link href="/register">
-                                <Button className='text-bluePrimary bg-white hover:bg-bluePrimary hover:text-white border-2 border-bluePrimary font-semibold py-2 px-4 rounded-md mx-2'>Register</Button>
+                                <Button className='border border-bluePrimary bg-white text-bluePrimary hover:bg-bluePrimary rounded-lg hover:text-white px-4 py-2'>Register</Button>
                             </Link>
                         </div>
                     </div>
@@ -130,10 +135,11 @@ const Login = () => {
 
                 <div className="w-full flex flex-col items-center mt-20 mb-10">
                     <div className=' xl:w-[30%] lg:w-[40%] sm:w-[95%] xxsm:w-[95%] flex flex-col justify-center bg-blueSecondary p-5 rounded-lg'>
-                        <div className='flex flex-col items-center'>
-                            <h1 className='text-[30px] font-semibold my-2'>Product Logo</h1>
-                            <h1 className='font-semibold text-xl my-2 text-center'>Get Starter with ERP Answers</h1>
-                            <h1 className='text-gray-400 mb-5 text-sm text-center'>Welcome<span>&#33;</span> Let&apos;s get started<span>&#33;</span></h1>
+                        <div className='flex flex-col items-center mb-5'>
+                        <Link href="/">
+                            <h1 className='text-xl font-bold items-center mx-5 my-2'><span className='text-redCustom'>ERP</span><span className='text-bluePrimary'>Answers</span></h1>
+                        </Link>
+                            <h1 className='font-semibold text-xl my-2 text-center'>Get Started With ERPAnswers</h1>
                         </div>
                         <Form {...form}>
                             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -143,7 +149,7 @@ const Login = () => {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input className='bg-white p-5' placeholder="Enter Email" {...field} />
+                                                <Input className='bg-white p-5' placeholder="Email Format" {...field} />
                                             </FormControl>
                                             {/* <FormDescription>
                                 This is your public display name.
@@ -158,7 +164,7 @@ const Login = () => {
                                     render={({ field }) => (
                                         <FormItem >
                                             <FormControl>
-                                                <Input className='bg-white p-5' placeholder="Password" type='password' {...field} />
+                                                <Input className='bg-white p-5' placeholder="Password" type='password' {...field} showPasswordToggle/>
                                             </FormControl>
                                             {/* <FormDescription>
                                 This is your public display name.

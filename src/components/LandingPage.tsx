@@ -13,12 +13,12 @@ const LandingPage: React.FC = () => {
                         <Link href="/">
                             <h1 className='text-xl font-bold items-center mx-5'><span className='text-redCustom'>ERP</span><span className='text-bluePrimary'>Answers</span></h1>
                         </Link>
-                        <div className='flex items-center mx-5'>
+                        <div className='flex items-center mx-5  gap-3'>
                             <Link href="/login">
-                                <Button className='text-black bg-white hover:bg-bluePrimary hover:text-white border-none font-semibold py-2 px-4 rounded-md mx-2'>Login</Button>
+                                <Button className='border border-bluePrimary bg-white text-bluePrimary hover:bg-bluePrimary rounded-lg hover:text-white px-4 py-2 '>Login</Button>
                             </Link>
                             <Link href="/register">
-                                <Button className='text-bluePrimary bg-white hover:bg-bluePrimary hover:text-white border-2 border-bluePrimary font-semibold py-2 px-4 rounded-md mx-2'>Register</Button>
+                                <Button className='border border-bluePrimary bg-white text-bluePrimary hover:bg-bluePrimary rounded-lg hover:text-white px-4 py-2 '>Register</Button>
                             </Link>
                         </div>
                     </div>
@@ -36,7 +36,7 @@ const LandingPage: React.FC = () => {
                                 placeholder='Type your question here...'></textarea>
                             <div className='flex justify-end mt-2'>
                                 <Link href="/register">
-                                    <Button className='text-bluePrimary bg-white hover:bg-bluePrimary hover:text-white border-2 border-bluePrimary font-semibold py-2 px-4 rounded-md mx-2'>Sign up to post your questions</Button>
+                                    <Button className='border border-bluePrimary bg-white text-bluePrimary hover:bg-bluePrimary rounded-lg hover:text-white px-4 py-2'>Sign up to post your questions</Button>
                                 </Link>
                             </div>
                         </div>

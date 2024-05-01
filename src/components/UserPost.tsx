@@ -12,6 +12,19 @@ import {
     FormLabel,
     FormMessage,
 } from "../components/ui/form"
+
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -47,11 +60,11 @@ const UserPost = () => {
 
     const email = typeof window !== 'undefined' ? localStorage.getItem('email') : null
     const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
-    
+
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
     const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
 
-    if(token && isAdmin === 'false'){
+    if (token && isAdmin === 'false') {
         router.push('/userPost');
     }
 
@@ -103,7 +116,7 @@ const UserPost = () => {
                 const response = await api.post("api/ERP/Question", formData);
                 // Handle success response
                 console.log("Form submitted successfully:", response.data);
-                
+                form.reset();
                 setIsSuccess(true);
             } else {
                 console.log("Error submitting form");
@@ -113,6 +126,7 @@ const UserPost = () => {
         } catch (error) {
             // Handle error response
             console.error("Error submitting form:", error);
+            form.reset();
             setIsError(true);
             // Optionally, you can show an error message to the user
         }
@@ -137,13 +151,20 @@ const UserPost = () => {
                                 {/* <ProfileWithStatus online={true} imageUrl={profileImg}/> 
                                 <NameRoleComponent name="John" role=""/> */}
 
-                                <Link href='logout'>
-                                    <Button
-                                        className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'
-                                    >
-                                        Logout
-                                    </Button>
-                                </Link>
+                                <AlertDialog >
+                                    <AlertDialogTrigger className='bg-bluePrimary text-white hover:bg-bluePrimary rounded-lg py-2 px-4 '>Logout</AlertDialogTrigger>
+                                    <AlertDialogContent className='w-[20%]'>
+                                        <AlertDialogHeader >
+                                            <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <Link href='logout'>
+                                                <AlertDialogAction className='bg-bluePrimary hover:bg-bluePrimary'>Ok</AlertDialogAction>
+                                            </Link>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </div>
                         </div>
                     </div>
@@ -182,7 +203,7 @@ const UserPost = () => {
                                             {isError && (
                                                 <Alert variant="destructive">
                                                     <AlertTitle>Error</AlertTitle>
-                                                    <AlertDescription>Failed to Login. Please try again later.</AlertDescription>
+                                                    <AlertDescription>Please Enter Your Question.</AlertDescription>
                                                 </Alert>
                                             )}
                                         </div>
@@ -201,12 +222,12 @@ const UserPost = () => {
                 <div className='flex justify-center mb-5'>
                     <div className='w-[90%] bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full overflow-y-auto'>
                         <h3 className='text-lg font-semibold mb-2'>Previously Asked Questions</h3>
-                        
+
                         {responses.map((response, index) => (
                             <div key={index} className='rounded-md border border-gray-300 my-2 bg-white'>
                                 <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => toggleQuestion(index)}>
                                     <div className='flex flex-col'>
-                                        <div>{response.question1}</div>
+                                        <div className='font-semibold'>{response.question1}</div>
                                     </div>
                                     <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 transition-transform transform ${openIndex === index ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M4.293 5.293a1 1 0 011.414 0L10 9.586l4.293-4.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414zM10 18a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />

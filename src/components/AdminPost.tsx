@@ -22,6 +22,18 @@ import { Textarea } from "@/components/ui/textarea"
 
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
 
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 interface unAnsweredQuestions {
     id: number;
     userID: number;
@@ -52,11 +64,17 @@ const AdminPost = () => {
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
     const router = useRouter();
+    const [answers, setAnswers] = useState(''); // Initialize answers state
+
+    const handleTextareaChange = (index: number, value: string) => {
+        
+        setAnswers(value);
+    };
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
     const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
 
-    if(token && isAdmin === 'true'){
+    if (token && isAdmin === 'true') {
         router.push('/admin');
     }
 
@@ -107,11 +125,12 @@ const AdminPost = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            answer: '',
+            answer: answers,
         },
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>, additionalData: unAnsweredQuestions) {
+        console.log(form.formState)
         try {
 
             if (values.answer !== '') {
@@ -124,8 +143,9 @@ const AdminPost = () => {
 
                 // // Handle success response
                 console.log("Form submitted successfully:", response.data);
+                form.reset();
                 setIsSuccess(true);
-            }else{
+            } else {
                 console.log("Form is Empty.");
                 setIsError(true);
             }
@@ -133,6 +153,7 @@ const AdminPost = () => {
         } catch (error) {
             // Handle error response
             console.error("Error submitting form:", error);
+            form.reset();
             setIsError(true);
             // Optionally, you can show an error message to the user
         }
@@ -162,11 +183,22 @@ const AdminPost = () => {
                         <div className=' w-full flex justify-between'>
                             <h1 className='text-xl font-bold items-center mx-5'><span className='text-redCustom'>ERP</span><span className='text-bluePrimary'>Answers</span></h1>
                             <div className='flex items-center mx-8'>
-                                <Link href='logout'>
-                                    <Button className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md' >
-                                        Logout
-                                    </Button>
-                                </Link>
+
+
+                                <AlertDialog>
+                                    <AlertDialogTrigger className='bg-bluePrimary text-white hover:bg-bluePrimary rounded-lg py-2 px-4 '>Logout</AlertDialogTrigger>
+                                    <AlertDialogContent className='w-[20%]'>
+                                        <AlertDialogHeader>
+                                            <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
+                                        </AlertDialogHeader>
+                                        <AlertDialogFooter>
+                                            <Link href='logout'>
+                                                <AlertDialogAction className='bg-bluePrimary hover:bg-bluePrimary'>Ok</AlertDialogAction>
+                                            </Link>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                        </AlertDialogFooter>
+                                    </AlertDialogContent>
+                                </AlertDialog>
                             </div>
                         </div>
                     </div>
@@ -184,7 +216,7 @@ const AdminPost = () => {
                                     <div key={index} className='rounded-md border border-gray-300 my-2 bg-white'>
                                         <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => toggleQuestion1(index)}>
                                             <div className='flex flex-col'>
-                                                <div>{unAnsweredQuestion.question1}</div>
+                                                <div className='font-semibold'>{unAnsweredQuestion.question1}</div>
                                                 <div className="text-sm text-gray-500">{unAnsweredQuestion.email}</div>
                                             </div>
                                             <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 transition-transform transform ${unAnsweropenIndex === index ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="currentColor">
@@ -200,11 +232,14 @@ const AdminPost = () => {
                                                             name="answer"
                                                             render={({ field }) => (
                                                                 <FormItem>
-                                                                    <FormLabel>Post Answer</FormLabel>
+                                                                    <FormLabel>Post Your Answer</FormLabel>
                                                                     <FormControl>
 
-                                                                        <Textarea {...field}
-                                                                            placeholder='Type your answer here...' />
+                                                                        <Textarea 
+                                                                            placeholder='Type your answer here...' 
+                                                                             // Set value from state
+                                                                            {...field}
+                                                                            />
 
                                                                     </FormControl>
                                                                     <FormMessage />
@@ -221,7 +256,7 @@ const AdminPost = () => {
                                                             {isError && (
                                                                 <Alert variant="destructive">
                                                                     <AlertTitle>Error</AlertTitle>
-                                                                    <AlertDescription>Failed to submit form. Please try again later.</AlertDescription>
+                                                                    <AlertDescription>Please Enter Your Answer</AlertDescription>
                                                                 </Alert>
                                                             )}
                                                         </div>
@@ -239,11 +274,11 @@ const AdminPost = () => {
                         <div className="lg:w-1/2 h-full">
                             <div className='bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full overflow-y-auto'>
                                 <h3 className='text-lg font-semibold mb-2'>Answered Questions</h3>
-                                
+
                                 {answeredQuestions.map((answeredQuestion, index) => (
                                     <div key={index} className='rounded-md border border-gray-300 my-2 bg-white'>
                                         <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => toggleQuestion2(index)}>
-                                            
+
                                             <div className='flex flex-col '>
                                                 <div>{answeredQuestion.question1}</div>
                                                 <div className="text-sm text-gray-500">{answeredQuestion.email}</div>
@@ -263,7 +298,7 @@ const AdminPost = () => {
                         </div>
                     </div>
                 </div>
-                
+
                 {/* Footer */}
                 <div className="mt-auto border-t border-gray-300 bg-[#29363E] py-4 text-white">
                     <div className="container mx-auto">
@@ -278,7 +313,7 @@ const AdminPost = () => {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div >
         </>
     )
 }
