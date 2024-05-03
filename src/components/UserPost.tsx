@@ -228,15 +228,17 @@ const UserPost = () => {
 
                                 <AlertDialog >
                                     <AlertDialogTrigger className='bg-bluePrimary text-white hover:bg-bluePrimary rounded-lg py-2 px-4 '>Logout</AlertDialogTrigger>
-                                    <AlertDialogContent className='w-[20%]'>
+                                    <AlertDialogContent className='lg:w-[40%] sm:w-[80%]'>
                                         <AlertDialogHeader >
                                             <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
-                                            <Link href='logout'>
-                                                <AlertDialogAction className='bg-bluePrimary hover:bg-bluePrimary'>Ok</AlertDialogAction>
-                                            </Link>
-                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                            
+                                                <Link href='logout'>
+                                                    <AlertDialogAction className='bg-bluePrimary hover:bg-bluePrimary me-3'>Ok</AlertDialogAction>
+                                                </Link>
+                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
                                 </AlertDialog>
@@ -288,7 +290,7 @@ const UserPost = () => {
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent>
-                                                            {domains.map((domain,index) => (
+                                                            {domains.map((domain, index) => (
                                                                 <div key={index}>
                                                                     <SelectItem key={index} value={`${domain.domainName}`}>{domain.domainName}</SelectItem>
                                                                 </div>

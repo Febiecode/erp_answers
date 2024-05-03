@@ -192,7 +192,7 @@ const AdminPost = () => {
 
                                 <AlertDialog>
                                     <AlertDialogTrigger className='bg-bluePrimary text-white hover:bg-bluePrimary rounded-lg py-2 px-4 '>Logout</AlertDialogTrigger>
-                                    <AlertDialogContent className='w-[20%]'>
+                                    <AlertDialogContent className='lg:w-[40%] sm:w-[80%]'>
                                         <AlertDialogHeader>
                                             <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
                                         </AlertDialogHeader>
