@@ -198,7 +198,7 @@ const AdminPost = () => {
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
                                             <Link href='logout'>
-                                                <AlertDialogAction className='bg-bluePrimary hover:bg-bluePrimary'>Ok</AlertDialogAction>
+                                                <AlertDialogAction className='bg-bluePrimary hover:bg-bluePrimary me-3'>Ok</AlertDialogAction>
                                             </Link>
                                             <AlertDialogCancel>Cancel</AlertDialogCancel>
                                         </AlertDialogFooter>
