@@ -288,9 +288,9 @@ const UserPost = () => {
                                                             </SelectTrigger>
                                                         </FormControl>
                                                         <SelectContent>
-                                                            {domains.map((domain) => (
+                                                            {domains.map((domain,index) => (
                                                                 <div>
-                                                                    <SelectItem value={`${domain.domainName}`}>{domain.domainName}</SelectItem>
+                                                                    <SelectItem key={index} value={`${domain.domainName}`}>{domain.domainName}</SelectItem>
                                                                 </div>
                                                             ))}
                                                         </SelectContent>
@@ -317,7 +317,7 @@ const UserPost = () => {
                                                             <SelectContent>
                                                                 {subDomains.map((subDomain, index) => (
                                                                     <div>
-                                                                        <SelectItem value={`${subDomain.description}`}>{subDomain.description}</SelectItem>
+                                                                        <SelectItem key={index} value={`${subDomain.description}`}>{subDomain.description}</SelectItem>
                                                                     </div>
                                                                 ))}
                                                             </SelectContent>
