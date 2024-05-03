@@ -362,7 +362,7 @@ const UserPost = () => {
                         <h3 className='text-lg font-semibold mb-2'>Previously Asked Questions</h3>
 
                         {responses.map((response, index) => (
-                            <div key={index} className='rounded-md border border-gray-300 my-2 bg-white'>
+                            <div key={response.id} className='rounded-md border border-gray-300 my-2 bg-white'>
                                 <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => { toggleQuestion(index) }}>
 
                                     <div className='w-full'>
