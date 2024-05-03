@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import Link from 'next/link';
+import { Dot } from "lucide-react"
 import { useRouter } from 'next/navigation';
 
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,11 +27,12 @@ import { Button } from "@/components/ui/button"
 import api from '../services/api'
 
 const formSchema = z.object({
-    email: z.string().email({
-        message: "Please enter the Email ",
-    }),
-    username: z.string().min(4, {
-        message: "Please enter the Username",
+    email: z
+        .string()
+        .min(1, { message: "Please enter a email" })
+        .email({ message: "Invalid Email Format" }),
+    username: z.string().min(1, {
+        message: "Please enter the username",
     }),
     password: z.string().min(6, {
         message: "Password must be at least 6 characters.",
@@ -53,13 +55,13 @@ const Register = () => {
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
     const isAdmin = typeof window !== 'undefined' ? localStorage.getItem('isAdmin') : null
 
-    if(token && isAdmin === 'false'){
+    if (token && isAdmin === 'false') {
         router.push('/userPost');
-    }else if(token && isAdmin === 'true'){
+    } else if (token && isAdmin === 'true') {
         router.push('/admin');
     }
 
-    
+
     // 1. Define your form.
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
@@ -71,7 +73,6 @@ const Register = () => {
         },
     })
     useEffect(() => {
-        form.reset()
         if (err) {
             const successTimer = setTimeout(() => {
             }, 3000);
@@ -143,7 +144,7 @@ const Register = () => {
                                     render={({ field }) => (
                                         <FormItem>
                                             <FormControl>
-                                                <Input className='bg-white p-5' placeholder="Email Format" {...field} />
+                                                <Input className='bg-white p-5' placeholder="email@example.com" {...field} />
                                             </FormControl>
                                             {/* <FormDescription>
                                 This is your public display name.
@@ -223,7 +224,7 @@ const Register = () => {
             {/* Footer */}
             <div className="mt-auto border-t border-gray-300 bg-[#29363E] py-4 text-white">
                 <div className="container mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2">
+                    {/* <div className="grid grid-cols-1 lg:grid-cols-2">
                         <div className="lg:col-span-1 sm:col-span-12">
                             <h1 className="font-semibold">RapidSoft Solutions @ 2024. All rights reserved</h1>
                         </div>
@@ -231,6 +232,14 @@ const Register = () => {
                             <span className="pr-2">Terms</span>
                             <span className="pr-2">Privacy</span>
                         </div>
+                    </div> */}
+
+                    <div className='flex justify-center items-center text-xs'>
+                        <span className='font-extralight'>© CopyRight 2024&ensp;</span>
+                        <span>RapidSoft Solutions.&ensp;</span>
+                        <span className='font-extralight'>All Rights Reserved</span>
+                        <span><Dot /></span>
+                        <span><a href="/privacyPolicy" className='text-bluePrimary underline decoration-white underline-offset-4'>Privacy Policy</a></span>
                     </div>
                 </div>
             </div>

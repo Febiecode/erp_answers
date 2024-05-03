@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import Link from 'next/link';
+import {Dot} from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useRouter } from 'next/navigation';
 const LandingPage: React.FC = () => {
@@ -60,7 +61,7 @@ const LandingPage: React.FC = () => {
             {/* Footer */}
             <div className="mt-auto border-t border-gray-300 bg-[#29363E] py-4 text-white">
                 <div className="container mx-auto">
-                    <div className="grid grid-cols-1 lg:grid-cols-2">
+                    {/* <div className="grid grid-cols-1 lg:grid-cols-2">
                         <div className="lg:col-span-1 sm:col-span-12">
                             <h1 className="font-semibold">RapidSoft Solutions @ 2024. All rights reserved</h1>
                         </div>
@@ -68,6 +69,14 @@ const LandingPage: React.FC = () => {
                             <span className="pr-2">Terms</span>
                             <span className="pr-2">Privacy</span>
                         </div>
+                    </div> */}
+
+                    <div className='flex justify-center items-center text-xs'>
+                    <span className='font-extralight'>© CopyRight 2024&ensp;</span>
+                    <span>RapidSoft Solutions.&ensp;</span>
+                    <span className='font-extralight'>All Rights Reserved</span>
+                    <span><Dot/></span>
+                    <span><a href="/privacyPolicy" className='text-bluePrimary underline decoration-white underline-offset-4'>Privacy Policy</a></span>
                     </div>
                 </div>
             </div>

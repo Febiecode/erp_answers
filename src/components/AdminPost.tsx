@@ -1,6 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { Dot } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { withAuth } from '../utils/adminAuth';
 import api from '../services/api'
@@ -40,6 +41,8 @@ interface unAnsweredQuestions {
     email: string;
     question1: string;
     answer: string;
+    module: string;
+    subModule: string;
 }
 
 
@@ -50,6 +53,8 @@ interface AnsweredQuestions {
     question1: string;
     answered: true;
     answer1: string;
+    module: string;
+    subModule: string;
 }
 
 const formSchema = z.object({
@@ -67,7 +72,7 @@ const AdminPost = () => {
     const [answers, setAnswers] = useState(''); // Initialize answers state
 
     const handleTextareaChange = (index: number, value: string) => {
-        
+
         setAnswers(value);
     };
 
@@ -210,14 +215,21 @@ const AdminPost = () => {
                 <div className="container-fluid h-full mb-10">
                     <div className="lg:flex h-full">
                         <div className="lg:w-1/2 h-full">
-                            <div className='bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full overflow-y-auto'>
+                            <div className='bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full'>
                                 <h3 className='text-lg font-semibold mb-2'>Unanswered Questions</h3>
                                 {unAnsweredQuestions.map((unAnsweredQuestion, index) => (
                                     <div key={index} className='rounded-md border border-gray-300 my-2 bg-white'>
-                                        <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => toggleQuestion1(index)}>
-                                            <div className='flex flex-col'>
-                                                <div className='font-semibold'>{unAnsweredQuestion.question1}</div>
+                                        <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200" onClick={() => toggleQuestion1(index)}>
+                                            <div className='flex flex-col  w-full'>
+                                                <div className='flex justify-between'>
+                                                    <div className='font-semibold'>{unAnsweredQuestion.question1}</div>
+                                                    <div className='flex'>
+                                                        <span className="text-xs bg-gray-400 rounded-xl px-1 ms-1 flex items-center">{unAnsweredQuestion.module}</span>
+                                                        <span className="text-xs  bg-gray-500 rounded-xl px-1 ms-1 flex items-center">{unAnsweredQuestion.subModule}</span>
+                                                    </div>
+                                                </div>
                                                 <div className="text-sm text-gray-500">{unAnsweredQuestion.email}</div>
+
                                             </div>
                                             <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 transition-transform transform ${unAnsweropenIndex === index ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="currentColor">
                                                 <path fillRule="evenodd" d="M4.293 5.293a1 1 0 011.414 0L10 9.586l4.293-4.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414zM10 18a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
@@ -235,11 +247,11 @@ const AdminPost = () => {
                                                                     <FormLabel>Post Your Answer</FormLabel>
                                                                     <FormControl>
 
-                                                                        <Textarea 
-                                                                            placeholder='Type your answer here...' 
-                                                                             // Set value from state
+                                                                        <Textarea
+                                                                            placeholder='Type your answer here...'
+                                                                            // Set value from state
                                                                             {...field}
-                                                                            />
+                                                                        />
 
                                                                     </FormControl>
                                                                     <FormMessage />
@@ -279,9 +291,18 @@ const AdminPost = () => {
                                     <div key={index} className='rounded-md border border-gray-300 my-2 bg-white'>
                                         <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => toggleQuestion2(index)}>
 
-                                            <div className='flex flex-col '>
-                                                <div>{answeredQuestion.question1}</div>
+                                            
+
+                                            <div className='flex flex-col  w-full'>
+                                                <div className='flex justify-between'>
+                                                    <div className='font-semibold'>{answeredQuestion.question1}</div>
+                                                    <div className='flex'>
+                                                        <span className=" bg-gray-400 rounded-xl text-xs px-1 flex text-center items-center">{answeredQuestion.module}</span>
+                                                        <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{answeredQuestion.subModule}</span>
+                                                    </div>
+                                                </div>
                                                 <div className="text-sm text-gray-500">{answeredQuestion.email}</div>
+
                                             </div>
                                             <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 transition-transform transform ${answeropenIndex === index ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="currentColor">
                                                 <path fillRule="evenodd" d="M4.293 5.293a1 1 0 011.414 0L10 9.586l4.293-4.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414zM10 18a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
@@ -302,14 +323,22 @@ const AdminPost = () => {
                 {/* Footer */}
                 <div className="mt-auto border-t border-gray-300 bg-[#29363E] py-4 text-white">
                     <div className="container mx-auto">
-                        <div className="grid grid-cols-1 lg:grid-cols-2">
-                            <div className="lg:col-span-1 sm:col-span-12">
-                                <h1 className="font-semibold">RapidSoft Solutions @ 2024. All rights reserved</h1>
-                            </div>
-                            <div className="lg:col-span-1 sm:col-span-12 lg:text-end xxsm:mt-5 lg:mt-0">
-                                <span className="pr-2">Terms</span>
-                                <span className="pr-2">Privacy</span>
-                            </div>
+                        {/* <div className="grid grid-cols-1 lg:grid-cols-2">
+                        <div className="lg:col-span-1 sm:col-span-12">
+                            <h1 className="font-semibold">RapidSoft Solutions @ 2024. All rights reserved</h1>
+                        </div>
+                        <div className="lg:col-span-1 sm:col-span-12 lg:text-end xxsm:mt-5 lg:mt-0">
+                            <span className="pr-2">Terms</span>
+                            <span className="pr-2">Privacy</span>
+                        </div>
+                    </div> */}
+
+                        <div className='flex justify-center items-center text-xs'>
+                            <span className='font-extralight'>© CopyRight 2024&ensp;</span>
+                            <span>RapidSoft Solutions.&ensp;</span>
+                            <span className='font-extralight'>All Rights Reserved</span>
+                            <span><Dot /></span>
+                            <span><a href="/privacyPolicy" className='text-bluePrimary underline decoration-white underline-offset-4'>Privacy Policy</a></span>
                         </div>
                     </div>
                 </div>
