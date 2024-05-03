@@ -137,7 +137,7 @@ const UserPost = () => {
         };
 
         fetchData();
-    }, []);
+    }, [userId]);
 
     React.useEffect(() => {
         const fetchData = async () => {
@@ -346,7 +346,7 @@ const UserPost = () => {
                                             )}
                                         </div>
                                         <div className="flex">
-                                            <Button type="submit" className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'>Add</Button>
+                                            <Button type="submit" className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'>Add</Button>
                                         </div>
                                     </form>
                                 </Form>
