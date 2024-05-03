@@ -289,7 +289,7 @@ const UserPost = () => {
                                                         </FormControl>
                                                         <SelectContent>
                                                             {domains.map((domain,index) => (
-                                                                <div>
+                                                                <div key={index}>
                                                                     <SelectItem key={index} value={`${domain.domainName}`}>{domain.domainName}</SelectItem>
                                                                 </div>
                                                             ))}
@@ -316,7 +316,7 @@ const UserPost = () => {
                                                             </FormControl>
                                                             <SelectContent>
                                                                 {subDomains.map((subDomain, index) => (
-                                                                    <div>
+                                                                    <div key={index}>
                                                                         <SelectItem key={index} value={`${subDomain.description}`}>{subDomain.description}</SelectItem>
                                                                     </div>
                                                                 ))}

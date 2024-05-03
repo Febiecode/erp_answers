@@ -218,7 +218,7 @@ const AdminPost = () => {
                             <div className='bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full'>
                                 <h3 className='text-lg font-semibold mb-2'>Unanswered Questions</h3>
                                 {unAnsweredQuestions.map((unAnsweredQuestion, index) => (
-                                    <div key={index} className='rounded-md border border-gray-300 my-2 bg-white'>
+                                    <div key={unAnsweredQuestion.id} className='rounded-md border border-gray-300 my-2 bg-white'>
                                         <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200" onClick={() => toggleQuestion1(index)}>
                                             <div className='flex flex-col  w-full'>
                                                 <div className='flex justify-between'>
@@ -288,7 +288,7 @@ const AdminPost = () => {
                                 <h3 className='text-lg font-semibold mb-2'>Answered Questions</h3>
 
                                 {answeredQuestions.map((answeredQuestion, index) => (
-                                    <div key={index} className='rounded-md border border-gray-300 my-2 bg-white'>
+                                    <div key={answeredQuestion.id} className='rounded-md border border-gray-300 my-2 bg-white'>
                                         <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => toggleQuestion2(index)}>
 
                                             
