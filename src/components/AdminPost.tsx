@@ -88,7 +88,8 @@ const AdminPost = () => {
         if (isSuccess) {
             const successTimer = setTimeout(() => {
                 setIsSuccess(false);
-            }, 3000); // 3 seconds
+                window.location.reload()
+            }, 1500); // 3 seconds
             return () => clearTimeout(successTimer);
         }
 
@@ -144,8 +145,6 @@ const AdminPost = () => {
                 }
                 // Make a POST request to the API endpoint with the form values
                 const response = await api.post("api/ERP/Answer", formData);
-
-
                 // // Handle success response
                 console.log("Form submitted successfully:", response.data);
                 form.reset();
