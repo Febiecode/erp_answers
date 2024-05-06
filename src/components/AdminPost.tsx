@@ -229,7 +229,7 @@ const AdminPost = () => {
 
 
                                 {unAnsweredQuestions.map((unAnsweredQuestion, index) => (
-                                    <Accordion type="single" collapsible className="w-full">
+                                    <Accordion key={index} type="single" collapsible className="w-full">
                                         <AccordionItem value={`item-${index}`}>
                                             <AccordionTrigger><div className='flex flex-col  w-full'>
                                                 <div className='flex justify-between'>
@@ -299,7 +299,7 @@ const AdminPost = () => {
 
 
                                 {answeredQuestions.map((answeredQuestion, index) => (
-                                    <Accordion type="single" collapsible className="w-full">
+                                    <Accordion key={index} type="single" collapsible className="w-full">
                                         <AccordionItem value={`item-${index}`}>
                                             <AccordionTrigger>
                                                 <div className='flex flex-col  w-full'>

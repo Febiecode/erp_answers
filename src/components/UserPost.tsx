@@ -372,7 +372,7 @@ const UserPost = () => {
                        
 
                         {responses.map((response, index) => (
-                             <Accordion type="single" collapsible className="w-full">
+                             <Accordion key={index} type="single" collapsible className="w-full">
                              <AccordionItem value="item-1">
                                  <AccordionTrigger>
                                      <div className='w-full'>
