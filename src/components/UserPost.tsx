@@ -233,11 +233,11 @@ const UserPost = () => {
                                             <AlertDialogTitle>Are you sure you want to logout?</AlertDialogTitle>
                                         </AlertDialogHeader>
                                         <AlertDialogFooter>
-                                            
-                                                <Link href='logout'>
-                                                    <AlertDialogAction className='bg-bluePrimary hover:bg-bluePrimary me-3'>Ok</AlertDialogAction>
-                                                </Link>
-                                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+
+                                            <Link href='logout'>
+                                                <AlertDialogAction className='bg-bluePrimary hover:bg-bluePrimary me-3'>Ok</AlertDialogAction>
+                                            </Link>
+                                            <AlertDialogCancel>Cancel</AlertDialogCancel>
 
                                         </AlertDialogFooter>
                                     </AlertDialogContent>
@@ -372,6 +372,10 @@ const UserPost = () => {
 
                                             <div>
                                                 <span className='font-semibold'>{response.question1}</span>
+                                                <div className='flex'>
+                                                    <span className=" bg-gray-400 rounded-xl text-xs px-1 flex text-center items-center me-3">{response.module}</span>
+                                                    <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{response.subModule}</span>
+                                                </div>
                                             </div>
 
                                             <div>
