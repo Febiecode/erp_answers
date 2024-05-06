@@ -221,27 +221,29 @@ const AdminPost = () => {
                         <div className="lg:w-1/2 h-full">
                             <div className='bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full'>
                                 <h3 className='text-lg font-semibold mb-2'>Unanswered Questions</h3>
-                                
-                                    
-                                        
-                                    
-                            
+
+
+
+
+
 
 
                                 {unAnsweredQuestions.map((unAnsweredQuestion, index) => (
                                     <Accordion key={index} type="single" collapsible className="w-full">
                                         <AccordionItem value={`item-${index}`}>
-                                            <AccordionTrigger><div className='flex flex-col  w-full'>
-                                                <div className='flex justify-between'>
-                                                    <div className='font-semibold'>{unAnsweredQuestion.question1}</div>
-                                                    <div className='flex'>
-                                                        <span className="text-xs bg-gray-400 rounded-xl px-1 ms-1 flex items-center">{unAnsweredQuestion.module}</span>
-                                                        <span className="text-xs  bg-gray-500 rounded-xl px-1 ms-1 flex items-center">{unAnsweredQuestion.subModule}</span>
+                                            <AccordionTrigger>
+                                                <div className='flex flex-col  w-full'>
+                                                    <div className='flex justify-between'>
+                                                        <div className='font-semibold'>{unAnsweredQuestion.question1}</div>
+                                                        <div className='flex'>
+                                                            <span className="text-xs bg-gray-400 rounded-xl px-1 ms-1 flex items-center">{unAnsweredQuestion.module}</span>
+                                                            <span className="text-xs  bg-gray-500 rounded-xl px-1 ms-1 flex items-center">{unAnsweredQuestion.subModule}</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="text-sm text-gray-500 text-left">{unAnsweredQuestion.email}</div>
+                                                    <div className="text-sm text-gray-500 text-left">{unAnsweredQuestion.email}</div>
 
-                                            </div></AccordionTrigger>
+                                                </div>
+                                            </AccordionTrigger>
                                             <AccordionContent>
 
                                                 <div className="p-2">
@@ -279,17 +281,17 @@ const AdminPost = () => {
                                     </Accordion>
                                 ))}
                                 {isSuccess && (
-                                            <Alert variant="success" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
-                                                <AlertTitle>Success</AlertTitle>
-                                                <AlertDescription>Form submitted successfully</AlertDescription>
-                                            </Alert>
-                                        )}
-                                        {isError && (
-                                            <Alert variant="destructive" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
-                                                <AlertTitle>Error</AlertTitle>
-                                                <AlertDescription>Please Enter Your Answer</AlertDescription>
-                                            </Alert>
-                                        )}
+                                    <Alert variant="success" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
+                                        <AlertTitle>Success</AlertTitle>
+                                        <AlertDescription>Form submitted successfully</AlertDescription>
+                                    </Alert>
+                                )}
+                                {isError && (
+                                    <Alert variant="destructive" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
+                                        <AlertTitle>Error</AlertTitle>
+                                        <AlertDescription>Please Enter Your Answer</AlertDescription>
+                                    </Alert>
+                                )}
                             </div>
                         </div>
                         <div className="lg:w-1/2 h-full">
@@ -302,15 +304,15 @@ const AdminPost = () => {
                                     <Accordion key={index} type="single" collapsible className="w-full">
                                         <AccordionItem value={`item-${index}`}>
                                             <AccordionTrigger>
-                                                <div className='flex flex-col  w-full'>
+                                            <div className='flex flex-col  w-full'>
                                                     <div className='flex justify-between'>
                                                         <div className='font-semibold'>{answeredQuestion.question1}</div>
                                                         <div className='flex'>
-                                                            <span className=" bg-gray-400 rounded-xl text-xs px-1 me-1 flex text-center items-center">{answeredQuestion.module}</span>
-                                                            <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{answeredQuestion.subModule}</span>
+                                                            <span className="text-xs bg-gray-400 rounded-xl px-1 ms-1 flex items-center">{answeredQuestion.module}</span>
+                                                            <span className="text-xs  bg-gray-500 rounded-xl px-1 ms-1 flex items-center">{answeredQuestion.subModule}</span>
                                                         </div>
                                                     </div>
-                                                    <div className="text-sm text-gray-500">{answeredQuestion.email}</div>
+                                                    <div className="text-sm text-gray-500 text-left">{answeredQuestion.email}</div>
 
                                                 </div>
                                             </AccordionTrigger>
