@@ -24,6 +24,13 @@ import { Textarea } from "@/components/ui/textarea"
 import { Alert, AlertDescription, AlertTitle } from "../components/ui/alert"
 
 import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
+
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -34,6 +41,9 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
+
+import { ToastAction } from "@/components/ui/toast"
+import { useToast } from "@/components/ui/use-toast"
 
 interface unAnsweredQuestions {
     id: number;
@@ -68,12 +78,16 @@ const AdminPost = () => {
     const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestions[]>([]);
     const [isSuccess, setIsSuccess] = useState(false);
     const [isError, setIsError] = useState(false);
+    const [answers, setAnswers] = useState(Array(unAnsweredQuestions.length).fill(''));
+    const [index, setIndex] = useState(0);
     const router = useRouter();
-    const [answers, setAnswers] = useState(''); // Initialize answers state
+    const { toast } = useToast()
 
     const handleTextareaChange = (index: number, value: string) => {
-
-        setAnswers(value);
+        const newAnswers = [...answers];
+        setIndex(index)
+        newAnswers[index] = value;
+        setAnswers(newAnswers);
     };
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
@@ -131,21 +145,25 @@ const AdminPost = () => {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-            answer: answers,
+            answer: '',
         },
     })
 
+
+
+
     async function onSubmit(values: z.infer<typeof formSchema>, additionalData: unAnsweredQuestions) {
-        console.log(form.formState)
         try {
 
-            if (values.answer !== '') {
+            if (answers[index] !== '') {
                 const formData = {
-                    userID: additionalData.userID, answer: values.answer, questionID: additionalData.id
+                    userID: additionalData.userID, answer: answers[index], questionID: additionalData.id
                 }
+
+                console.log(formData)
                 // Make a POST request to the API endpoint with the form values
                 const response = await api.post("api/ERP/Answer", formData);
-                // // Handle success response
+                // Handle success response
                 console.log("Form submitted successfully:", response.data);
                 form.reset();
                 setIsSuccess(true);
@@ -157,28 +175,12 @@ const AdminPost = () => {
         } catch (error) {
             // Handle error response
             console.error("Error submitting form:", error);
-            form.reset();
             setIsError(true);
             // Optionally, you can show an error message to the user
         }
     }
 
 
-    const toggleQuestion1 = (index: number) => {
-        if (unAnsweropenIndex === index) {
-            setunAnsweropenIndex(null);
-        } else {
-            setunAnsweropenIndex(index);
-        }
-    };
-
-    const toggleQuestion2 = (index: number) => {
-        if (answeropenIndex === index) {
-            setansweropenIndex(null);
-        } else {
-            setansweropenIndex(index);
-        }
-    };
     return (
         <>
             <div className='min-h-screen flex flex-col'>
@@ -212,14 +214,24 @@ const AdminPost = () => {
 
 
                 <div className="container-fluid h-full mb-10">
+
+
+
                     <div className="lg:flex h-full">
                         <div className="lg:w-1/2 h-full">
                             <div className='bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full'>
                                 <h3 className='text-lg font-semibold mb-2'>Unanswered Questions</h3>
+                                
+                                    
+                                        
+                                    
+                            
+
+
                                 {unAnsweredQuestions.map((unAnsweredQuestion, index) => (
-                                    <div key={unAnsweredQuestion.id} className='rounded-md border border-gray-300 my-2 bg-white'>
-                                        <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200" onClick={() => toggleQuestion1(index)}>
-                                            <div className='flex flex-col  w-full'>
+                                    <Accordion type="single" collapsible className="w-full">
+                                        <AccordionItem value={`item-${index}`}>
+                                            <AccordionTrigger><div className='flex flex-col  w-full'>
                                                 <div className='flex justify-between'>
                                                     <div className='font-semibold'>{unAnsweredQuestion.question1}</div>
                                                     <div className='flex'>
@@ -227,92 +239,88 @@ const AdminPost = () => {
                                                         <span className="text-xs  bg-gray-500 rounded-xl px-1 ms-1 flex items-center">{unAnsweredQuestion.subModule}</span>
                                                     </div>
                                                 </div>
-                                                <div className="text-sm text-gray-500">{unAnsweredQuestion.email}</div>
+                                                <div className="text-sm text-gray-500 text-left">{unAnsweredQuestion.email}</div>
 
-                                            </div>
-                                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 transition-transform transform ${unAnsweropenIndex === index ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M4.293 5.293a1 1 0 011.414 0L10 9.586l4.293-4.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414zM10 18a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        {unAnsweropenIndex === index && (
-                                            <div className="p-2">
-                                                <Form {...form}>
-                                                    <form onSubmit={form.handleSubmit(data => onSubmit(data, unAnsweredQuestion))} className="space-y-4">
-                                                        <FormField
-                                                            control={form.control}
-                                                            name="answer"
-                                                            render={({ field }) => (
-                                                                <FormItem>
-                                                                    <FormLabel>Post Your Answer</FormLabel>
-                                                                    <FormControl>
+                                            </div></AccordionTrigger>
+                                            <AccordionContent>
 
-                                                                        <Textarea
-                                                                            placeholder='Type your answer here...'
-                                                                            // Set value from state
-                                                                            {...field}
-                                                                        />
+                                                <div className="p-2">
+                                                    <Form {...form}>
+                                                        <form onSubmit={form.handleSubmit(data => onSubmit(data, unAnsweredQuestion))} className="space-y-4">
+                                                            <FormField
+                                                                control={form.control}
+                                                                name="answer"
+                                                                render={() => (
+                                                                    <FormItem>
+                                                                        <FormLabel>Post Your Answer</FormLabel>
+                                                                        <FormControl>
 
-                                                                    </FormControl>
-                                                                    <FormMessage />
-                                                                </FormItem>
-                                                            )}
-                                                        />
-                                                        <div className="flex text-left">
-                                                            {isSuccess && (
-                                                                <Alert variant="success">
-                                                                    <AlertTitle>Success</AlertTitle>
-                                                                    <AlertDescription>Form submitted successfully</AlertDescription>
-                                                                </Alert>
-                                                            )}
-                                                            {isError && (
-                                                                <Alert variant="destructive">
-                                                                    <AlertTitle>Error</AlertTitle>
-                                                                    <AlertDescription>Please Enter Your Answer</AlertDescription>
-                                                                </Alert>
-                                                            )}
-                                                        </div>
-                                                        <div className="flex">
-                                                            <Button type="submit" className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'>Add</Button>
-                                                        </div>
-                                                    </form>
-                                                </Form>
-                                            </div>
-                                        )}
-                                    </div>
+                                                                            <Textarea
+                                                                                placeholder='Type your answer here...'
+                                                                                value={answers[index]}
+                                                                                onChange={(e) => handleTextareaChange(index, e.target.value)}
+                                                                            />
+
+                                                                        </FormControl>
+                                                                        <FormMessage />
+                                                                    </FormItem>
+                                                                )}
+                                                            />
+
+                                                            <div className="flex">
+                                                                <Button type="submit" className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'>Add</Button>
+                                                            </div>
+                                                        </form>
+                                                    </Form>
+                                                </div>
+
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
                                 ))}
+                                {isSuccess && (
+                                            <Alert variant="success" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
+                                                <AlertTitle>Success</AlertTitle>
+                                                <AlertDescription>Form submitted successfully</AlertDescription>
+                                            </Alert>
+                                        )}
+                                        {isError && (
+                                            <Alert variant="destructive" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
+                                                <AlertTitle>Error</AlertTitle>
+                                                <AlertDescription>Please Enter Your Answer</AlertDescription>
+                                            </Alert>
+                                        )}
                             </div>
                         </div>
                         <div className="lg:w-1/2 h-full">
                             <div className='bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full overflow-y-auto'>
                                 <h3 className='text-lg font-semibold mb-2'>Answered Questions</h3>
 
+
+
                                 {answeredQuestions.map((answeredQuestion, index) => (
-                                    <div key={answeredQuestion.id} className='rounded-md border border-gray-300 my-2 bg-white'>
-                                        <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => toggleQuestion2(index)}>
-
-                                            
-
-                                            <div className='flex flex-col  w-full'>
-                                                <div className='flex justify-between'>
-                                                    <div className='font-semibold'>{answeredQuestion.question1}</div>
-                                                    <div className='flex'>
-                                                        <span className=" bg-gray-400 rounded-xl text-xs px-1 me-1 flex text-center items-center">{answeredQuestion.module}</span>
-                                                        <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{answeredQuestion.subModule}</span>
+                                    <Accordion type="single" collapsible className="w-full">
+                                        <AccordionItem value={`item-${index}`}>
+                                            <AccordionTrigger>
+                                                <div className='flex flex-col  w-full'>
+                                                    <div className='flex justify-between'>
+                                                        <div className='font-semibold'>{answeredQuestion.question1}</div>
+                                                        <div className='flex'>
+                                                            <span className=" bg-gray-400 rounded-xl text-xs px-1 me-1 flex text-center items-center">{answeredQuestion.module}</span>
+                                                            <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{answeredQuestion.subModule}</span>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="text-sm text-gray-500">{answeredQuestion.email}</div>
+                                                    <div className="text-sm text-gray-500">{answeredQuestion.email}</div>
 
-                                            </div>
-                                            <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 transition-transform transform ${answeropenIndex === index ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="currentColor">
-                                                <path fillRule="evenodd" d="M4.293 5.293a1 1 0 011.414 0L10 9.586l4.293-4.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414zM10 18a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                                            </svg>
-                                        </div>
-                                        {answeropenIndex === index && (
-                                            <div className="p-2">
+                                                </div>
+                                            </AccordionTrigger>
+                                            <AccordionContent>
                                                 {answeredQuestion.answer1}
-                                            </div>
-                                        )}
-                                    </div>
+                                            </AccordionContent>
+                                        </AccordionItem>
+                                    </Accordion>
+
+
                                 ))}
                             </div>
                         </div>

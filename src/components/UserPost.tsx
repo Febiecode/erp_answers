@@ -14,6 +14,13 @@ import {
 } from "../components/ui/form"
 
 import {
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
+} from "@/components/ui/accordion"
+
+import {
     AlertDialog,
     AlertDialogAction,
     AlertDialogCancel,
@@ -334,18 +341,18 @@ const UserPost = () => {
 
 
                                         <div className="flex text-left">
-                                            {isSuccess && (
-                                                <Alert variant="success">
-                                                    <AlertTitle>Success</AlertTitle>
-                                                    <AlertDescription>Form submitted successfully</AlertDescription>
-                                                </Alert>
-                                            )}
-                                            {isError && (
-                                                <Alert variant="destructive">
-                                                    <AlertTitle>Error</AlertTitle>
-                                                    <AlertDescription>Please ensure! Are you filler all required form fields?</AlertDescription>
-                                                </Alert>
-                                            )}
+                                        {isSuccess && (
+                                            <Alert variant="success" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
+                                                <AlertTitle>Success</AlertTitle>
+                                                <AlertDescription>Form submitted successfully</AlertDescription>
+                                            </Alert>
+                                        )}
+                                        {isError && (
+                                            <Alert variant="destructive" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
+                                                <AlertTitle>Error</AlertTitle>
+                                                <AlertDescription>Please Enter Your Answer</AlertDescription>
+                                            </Alert>
+                                        )}
                                         </div>
                                         <div className="flex">
                                             <Button type="submit" className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'>Add</Button>
@@ -362,43 +369,40 @@ const UserPost = () => {
                 <div className='flex justify-center mb-5'>
                     <div className='w-[90%] bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full '>
                         <h3 className='text-lg font-semibold mb-2'>Previously Asked Questions</h3>
+                       
 
                         {responses.map((response, index) => (
-                            <div key={response.id} className='rounded-md border border-gray-300 my-2 bg-white'>
-                                <div className="flex justify-between items-center p-2 cursor-pointer border border-1 border-gray-200 " onClick={() => { toggleQuestion(index) }}>
-
-                                    <div className='w-full'>
-                                        <div className=' flex flex-row gap-3 justify-between'>
-
-                                            <div>
-                                                <span className='font-semibold'>{response.question1}</span>
-                                                <div className='flex'>
-                                                    <span className=" bg-gray-400 rounded-xl text-xs px-1 flex text-center items-center me-3">{response.module}</span>
-                                                    <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{response.subModule}</span>
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                {response.answered &&
-                                                    <span className='bg-green-500 rounded-xl text-xs px-1 flex text-center items-center'>Answered</span>
-                                                }
-
-                                                {response.answered === false &&
-                                                    <span className='bg-red-500 rounded-xl text-xs px-1 flex text-center items-center'>Not Answered</span>
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <svg xmlns="http://www.w3.org/2000/svg" className={`h-6 w-6 transition-transform transform ${openIndex === index ? 'rotate-180' : 'rotate-0'}`} viewBox="0 0 20 20" fill="currentColor">
-                                        <path fillRule="evenodd" d="M4.293 5.293a1 1 0 011.414 0L10 9.586l4.293-4.293a1 1 0 111.414 1.414l-5 5a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414zM10 18a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
-                                    </svg>
-                                </div>
-                                {openIndex === index && (
-                                    <div className="p-2">
-                                        {response.answer}
-                                    </div>
-                                )}
-                            </div>
+                             <Accordion type="single" collapsible className="w-full">
+                             <AccordionItem value="item-1">
+                                 <AccordionTrigger>
+                                     <div className='w-full'>
+                                         <div className=' flex flex-row gap-3 justify-between'>
+ 
+                                             <div>
+                                                 <p className='font-semibold text-left text-md'>{response.question1}</p>
+                                                 <div className='flex'>
+                                                     <span className=" bg-gray-400 rounded-xl text-xs px-1 flex text-center items-center me-3">{response.module}</span>
+                                                     <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{response.subModule}</span>
+                                                 </div>
+                                             </div>
+ 
+                                             <div>
+                                                 {response.answered &&
+                                                     <span className='bg-green-500 rounded-xl text-xs px-1 flex text-center items-center'>Answered</span>
+                                                 }
+ 
+                                                 {response.answered === false &&
+                                                     <span className='bg-red-500 rounded-xl text-xs px-1 flex text-center items-center'>Not Answered</span>
+                                                 }
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </AccordionTrigger>
+                                 <AccordionContent>
+                                 {response.answer}
+                                 </AccordionContent>
+                             </AccordionItem>
+                         </Accordion>
                         ))}
                     </div>
                 </div>
