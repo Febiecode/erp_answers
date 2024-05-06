@@ -296,7 +296,7 @@ const AdminPost = () => {
                                                 <div className='flex justify-between'>
                                                     <div className='font-semibold'>{answeredQuestion.question1}</div>
                                                     <div className='flex'>
-                                                        <span className=" bg-gray-400 rounded-xl text-xs px-1 flex text-center items-center">{answeredQuestion.module}</span>
+                                                        <span className=" bg-gray-400 rounded-xl text-xs px-1 me-1 flex text-center items-center">{answeredQuestion.module}</span>
                                                         <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{answeredQuestion.subModule}</span>
                                                     </div>
                                                 </div>
