@@ -97,6 +97,7 @@ const UserPost = () => {
     const router = useRouter();
 
     const email = typeof window !== 'undefined' ? localStorage.getItem('email') : null
+    const userName = typeof window !== 'undefined' ? localStorage.getItem('userName') : null
     const userId = typeof window !== 'undefined' ? localStorage.getItem('userId') : null
 
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
@@ -214,14 +215,6 @@ const UserPost = () => {
         }
     }
 
-
-    const toggleQuestion = (index: number) => {
-        if (openIndex === index) {
-            setOpenIndex(null);
-        } else {
-            setOpenIndex(index);
-        }
-    };
     return (
         <>
             <div className='min-h-screen flex flex-col'>
@@ -230,8 +223,6 @@ const UserPost = () => {
                         <div className=' w-full flex justify-between'>
                             <h1 className='text-xl font-bold items-center mx-5'><span className='text-redCustom'>ERP</span><span className='text-bluePrimary'>Answers</span></h1>
                             <div className='flex items-center mx-8'>
-                                {/* <ProfileWithStatus online={true} imageUrl={profileImg}/> 
-                                <NameRoleComponent name="John" role=""/> */}
 
                                 <AlertDialog >
                                     <AlertDialogTrigger className='bg-bluePrimary text-white hover:bg-bluePrimary rounded-lg py-2 px-4 '>Logout</AlertDialogTrigger>
@@ -256,8 +247,9 @@ const UserPost = () => {
                     <div className="flex justify-center">
                         <div className='w-[90%] bg-grayBackground rounded-lg p-4'>
                             <div className='text-left'>
-                                <div className='flex'>
-                                    <CircleUserRound /><h1 className='text-lg font-semibold mb-10'>{isClient ? email : 'Please Login'}</h1>
+                                <div className='flex items-center mb-5'>
+                                    <CircleUserRound />
+                                    <h1 className='text-lg font-semibold ms-1'>{isClient ? userName : 'Please Login'}</h1>
                                 </div>
                                 <Form {...form}>
                                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -341,18 +333,18 @@ const UserPost = () => {
 
 
                                         <div className="flex text-left">
-                                        {isSuccess && (
-                                            <Alert variant="success" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
-                                                <AlertTitle>Success</AlertTitle>
-                                                <AlertDescription>Form submitted successfully</AlertDescription>
-                                            </Alert>
-                                        )}
-                                        {isError && (
-                                            <Alert variant="destructive" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
-                                                <AlertTitle>Error</AlertTitle>
-                                                <AlertDescription>Please Enter Your Answer</AlertDescription>
-                                            </Alert>
-                                        )}
+                                            {isSuccess && (
+                                                <Alert variant="success" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
+                                                    <AlertTitle>Success</AlertTitle>
+                                                    <AlertDescription>Form submitted successfully</AlertDescription>
+                                                </Alert>
+                                            )}
+                                            {isError && (
+                                                <Alert variant="destructive" className='fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg'>
+                                                    <AlertTitle>Error</AlertTitle>
+                                                    <AlertDescription>Please Enter Your Answer</AlertDescription>
+                                                </Alert>
+                                            )}
                                         </div>
                                         <div className="flex">
                                             <Button type="submit" className='bg-bluePrimary hover:bg-bluePrimary text-white font-semibold py-2 px-4 rounded-md'>Add</Button>
@@ -369,40 +361,40 @@ const UserPost = () => {
                 <div className='flex justify-center mb-5'>
                     <div className='w-[90%] bg-grayBackground border border-1 border-bluePrimary rounded-lg p-4 mt-10 mx-5 h-full '>
                         <h3 className='text-lg font-semibold mb-2'>Previously Asked Questions</h3>
-                       
+
 
                         {responses.map((response, index) => (
-                             <Accordion key={index} type="single" collapsible className="w-full">
-                             <AccordionItem value="item-1">
-                                 <AccordionTrigger>
-                                     <div className='w-full'>
-                                         <div className=' flex flex-row gap-3 justify-between'>
- 
-                                             <div>
-                                                 <p className='font-semibold text-left text-md'>{response.question1}</p>
-                                                 <div className='flex'>
-                                                     <span className=" bg-gray-400 rounded-xl text-xs px-1 flex text-center items-center me-3">{response.module}</span>
-                                                     <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{response.subModule}</span>
-                                                 </div>
-                                             </div>
- 
-                                             <div>
-                                                 {response.answered &&
-                                                     <span className='bg-green-500 rounded-xl text-xs px-1 flex text-center items-center'>Answered</span>
-                                                 }
- 
-                                                 {response.answered === false &&
-                                                     <span className='bg-red-500 rounded-xl text-xs px-1 flex text-center items-center'>Not Answered</span>
-                                                 }
-                                             </div>
-                                         </div>
-                                     </div>
-                                 </AccordionTrigger>
-                                 <AccordionContent>
-                                 {response.answer}
-                                 </AccordionContent>
-                             </AccordionItem>
-                         </Accordion>
+                            <Accordion key={index} type="single" collapsible className="w-full">
+                                <AccordionItem value="item-1">
+                                    <AccordionTrigger>
+                                        <div className='w-full'>
+                                            <div className=' flex flex-row gap-3 justify-between'>
+
+                                                <div>
+                                                    <p className='font-semibold text-left text-md'>{response.question1}</p>
+                                                    <div className='flex'>
+                                                        <span className=" bg-gray-400 rounded-xl text-xs px-1 flex text-center items-center me-3">{response.module}</span>
+                                                        <span className=" bg-gray-500 rounded-xl text-xs px-1 flex text-center items-center">{response.subModule}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div>
+                                                    {response.answered &&
+                                                        <span className='bg-green-500 rounded-xl text-xs px-1 flex text-center items-center'>Answered</span>
+                                                    }
+
+                                                    {response.answered === false &&
+                                                        <span className='bg-red-500 rounded-xl text-xs px-1 flex text-center items-center'>Not Answered</span>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </AccordionTrigger>
+                                    <AccordionContent>
+                                        {response.answer}
+                                    </AccordionContent>
+                                </AccordionItem>
+                            </Accordion>
                         ))}
                     </div>
                 </div>
