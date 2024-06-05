@@ -1,36 +1,17 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#Landing Page
+![screencapture-erp-answers-vercel-app-2024-06-05-16_26_32](https://github.com/Febiecode/erp_answers/assets/93641901/9595c8cd-ec95-4045-9ef7-9b98a2ef6695)
 
-## Getting Started
+#Login Page
+![screencapture-erp-answers-vercel-app-login-2024-06-05-16_27_05](https://github.com/Febiecode/erp_answers/assets/93641901/7228f421-93b3-462b-850d-efa77ff94e37)
 
-First, run the development server:
+#Register Page
+![screencapture-erp-answers-vercel-app-register-2024-06-05-16_27_56](https://github.com/Febiecode/erp_answers/assets/93641901/93a374bc-939c-42ba-84ee-24826e2a67b0)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+#User Page
+![screencapture-erp-answers-vercel-app-userPost-2024-06-05-16_22_49](https://github.com/Febiecode/erp_answers/assets/93641901/82a092c9-478a-4cd8-9f39-91b277b6fc14)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+#Admin Page
+![screencapture-erp-answers-vercel-app-admin-2024-06-05-16_25_25](https://github.com/Febiecode/erp_answers/assets/93641901/82b92d6c-5824-45c7-8ce0-38d5aef8e324)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+#Logout Page
+![screencapture-erp-answers-vercel-app-userPost-2024-06-05-16_24_11](https://github.com/Febiecode/erp_answers/assets/93641901/ddcf9053-6958-4032-a754-6a0c501d143d)
