@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://erpanswers-dev.hostedapp.in/',
+  baseURL: process.env.API_URL,
   // Other configurations like headers can be added here
 });
 
